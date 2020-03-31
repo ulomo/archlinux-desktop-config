@@ -45,6 +45,7 @@ polybar文件夹下的一些脚本是用来实现特定功能的，目前启用�
 flameshot --截图软件
 obs	--录屏推流
 dunst --显示消息
+rofi --搜索
 ```
 
 
