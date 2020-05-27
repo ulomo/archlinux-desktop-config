@@ -1,0 +1,14 @@
+#!/bin/bash
+##用来切换screenkey,使用xmonad中的快捷键。因为开启了screenkey后中文输入法就使用不了了，所以需要设置一下
+
+if ps -ef | grep screenkey | grep -v grep ;then
+    pkill screenkey
+    notify-send "screenkey off"
+else
+    screenkey -g 300x1180 --no-systray -s small
+    notify-send "screenkey on"
+fi
+
+
+
+
