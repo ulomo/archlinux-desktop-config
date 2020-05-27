@@ -1,0 +1,76 @@
+! scroll
+XTerm*saveLines: 1000
+XTerm*scrollBar: true
+XTerm*rightScrollBar: false
+XTerm*scrollbar.thickness: 4
+XTerm*scrollbar.background: #585eaa
+XTerm*scrollbar.foreground: #f47a55
+
+! white space around
+XTerm*internalBorder: 8
+
+! cursor
+XTerm*cursorBlink: true
+XTerm*cursorUnderLine: true
+XTerm*cursorColor: #f3715c
+
+
+! font
+!Liberation Mono:size=18:antialias=false !DejaVu Sans Mono:antialias=true:pixelsize=22 ! Iosevka Term:style=Regular
+XTerm*faceName: Iosevka,Iosevka Nerd Font:style=Regular,Book 
+XTerm*faceSize: 16
+!XTerm*font: 4x23
+XTerm.scaleHeight: 1.01
+
+
+
+! disable underlined text, instead color it
+XTerm.vt100.colorULMode: true
+XTerm.vt100.colorUL: #78cdd1
+
+
+! disable bold font faces, use color instead
+XTerm.vt100.colorBDMode: true
+XTerm.vt100.colorBD: #f3715c
+
+
+! keybind: clipboard
+XTerm*VT100.Translations: #override \n\
+<BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Shift Ctrl <Key> C: copy-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Shift Ctrl <Key> V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0)
+
+URxvt.perl-ext-comon:default,clipboard
+
+
+! define color
+XTerm.vt100.foreground: #839496
+XTerm.vt100.background: #1C2B40
+
+! italic color
+XTerm*colorITMode: true
+XTerm*colorIT: #78cdd1
+
+*.color0:  #000000
+*.color8:  #767676
+
+*.color1:  #C4A000
+*.color9: #FCE94F
+
+*.color2:  #f58f98 
+*.color10: #f173ac
+
+*.color3:  #4bd129  
+*.color11:  #8bd129
+
+*.color4:  #4e72b8
+*.color12: #7bbfea
+
+*.color5:  #75507B
+*.color13: #AD7FA8
+
+*.color6:  #76becc
+*.color14: #29d1cc
+
+*.color7:  #dddddd
+*.color15: #ffffff

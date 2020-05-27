@@ -1,0 +1,13 @@
+!clear Lock  
+keycode 133 =
+keycode 134 =
+!change Caps_Lock to Super_L
+keycode 66 = Super_L
+!clear lock
+clear lock
+!clear all mod_s with Super key
+clear mod4
+! add our new Super key
+add mod4 = Super_L
+
+
