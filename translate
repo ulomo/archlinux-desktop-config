@@ -1,0 +1,11 @@
+#!/bin/bash
+#翻译单词并拼读出来
+#author:narcissus
+
+#获取系统音量大小
+volume=`amixer sget Master | tr -d '[a-zA-Z][:punct:]' | awk '{print $2}' | sed -n '$p'`
+#通过在线语音拼读
+mplayer -volume ${volume} http://dict.youdao.com/dictvoice\?audio\="${@}" >/dev/null 2>&1
+
+#通过ydcv程序来对单词进行翻译
+ydcv "${@}"
