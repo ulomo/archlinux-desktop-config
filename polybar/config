@@ -9,14 +9,13 @@
 ;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
 #------------------------------globar style setting---------------------------------------{{{
 [colors]
-background = #eedfdf
-#background = #e3e4e6
-background-alt = #444c
-foreground = #222
+#background = #eedfdf
+#background-alt = #444c
+#foreground = #222
 
-#background = #222
-#background-alt = #444
-#foreground = #dfdfdf
+background = #1C2B40
+background-alt = #282828
+foreground = #298146
 
 foreground-alt = #555
 primary = #ffb52a
@@ -50,9 +49,9 @@ font-1 = "FontAwesome:size=11;4"
 #-----------------------------------------------------------------------------------------}}}
 
 #------------------------------icon position setting--------------------------------------{{{
-modules-left = memory cpu temperature fan docker hiscmd
-#modules-center = date
-modules-right = wlan pulseaudio backlight date battery trans
+modules-left = battery backlight pulseaudio bluetooth docker 
+modules-center = date check
+modules-right = wlan fan temperature cpu memory 
 
 tray-position = right
 tray-padding = 18
@@ -71,6 +70,7 @@ cursor-scroll = ns-resize
 #-----------------------------------------------------------------------------------------}}}
 
 #------------------------------mount pointmodule------------------------------------------{{{
+
 [module/filesystem]
 type = internal/fs
 ;interval = 2
@@ -263,7 +263,7 @@ date-alt = "%Y-%m-%d"
 time = %H:%M
 time-alt = " %H:%M:%S"
 
-format-prefix = 
+;format-prefix = 
 format-prefix-foreground = #444
 format-underline = #FF8C69
 
@@ -350,23 +350,16 @@ margin-bottom = 5
 
 [module/fan]
 type = custom/script
-exec = echo "  `sensors | grep cpu_fan | awk '{print $2}'` RPM"
-;interval = 2
-format-padding = 0
-format-underline = #17985f
+exec = ~/.config/polybar/c_script/fan
 
 [module/docker]
 type = custom/script
-;interval = 2
-exec = ~/.config/polybar/docker.sh
+exec = ~/.config/polybar/c_script/docker
 
-[module/hiscmd]
+[module/bluetooth]
 type = custom/script
-interval = 60
-exec = shuf -n1 ~/Documents/books/trscommand.txt
-#exec = echo ":::::: `tail -n1 ~/.zsh_history | cut -c 16-`"
+exec = ~/.config/polybar/c_script/bluetooth
 
-[module/trans]
+[module/check]
 type = custom/script
-interval = 300
-exec = ~/.local/bin/remember_word
+exec = ~/.config/polybar/c_script/check
