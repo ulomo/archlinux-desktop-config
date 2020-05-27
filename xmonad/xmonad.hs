@@ -131,21 +131,18 @@ projects =
   ]-- }}}
 -- {{{ app station
 myManageHook = composeAll
-		[ className =? "netease-cloud-music"			--> viewShift "9:Music"
+		[ className =? "netease-cloud-music"			--> viewShift "FSL9"
 		, className =? "netease-cloud-music"			--> doF W.swapDown  --wow it is amazing,it make windows down,and suit for workspace5,which make music in the middle,really really nice
-		, className =? "Gimp-2.1"							--> viewShift "4:Float"
-		, className =? "Gimp-2.1"							--> doFloat
 		, className =? "mplayer"						--> doIgnore
-   		, className =? "firefox" 						--> viewShift "2:Browser" --open window and shift to window
+   		, className =? "firefox" 						--> viewShift "FSL2" --open window and shift to window
    		, className =? "firefox" 						--> doFloat
    		, className =? "firefox" 						--> doF W.swapMaster
-   		, className =? "Typora" 						--> viewShift "5:Writer" 
+   		, className =? "Typora" 						--> viewShift "FSL3" 
    		, className =? "Typora" 						--> doFloat
-   		, className =? "Tencent"						--> viewShift "4:Float" 
-   		, className =? "Tencent"						--> doFloat
    		, className =? "Thunar"    						--> doFloat
-   		, className =? "VirtualBox" 					--> viewShift "3:Vbox" 
+   		, className =? "VirtualBox" 					--> viewShift "FSL5" 
    		, className =? "VirtualBox" 					--> doFloat
+   		, className =? "VirtualBox"						--> doF W.swapMaster
    		, manageDocks
    		]
 	where viewShift = doF . liftM2 (.) W.greedyView W.shift-- }}}
@@ -160,9 +157,9 @@ myLayoutHook =  hiddenWindows
 
             $  spacingWithEdge 2
 			$  subLayout [0,1,2] (Simplest)
-			$  onWorkspace "4:Float" simplestFloat
-			$  onWorkspace "9:Music" three
-			$  toggleLayouts tallsame talldiff ||| Grid ||| noBorders Full ||| three
+			-- $  onWorkspace "4:Float" simplestFloat
+			$  onWorkspace "FSL9" three
+			$  toggleLayouts talldiff tallsame  ||| Grid ||| noBorders Full ||| three
 tallsame	 = ResizableTall 1 (1/100) (1/2) []
 talldiff	 = ResizableTall 1 (1/100) (2/3) [] 
 three		 = ThreeColMid 1 (3/100) (1/2)-- }}}
@@ -272,17 +269,18 @@ myKeys =
        , ((0 , xK_o), spawn "pkill changeDesktopBg ; pkill sleep") --stop change desktop picture program 
        , ((0 , xK_r), spawn "pkill polybar; polybar -r -q mybar >/dev/null 2>&1 &") --stop change desktop picture program 
        , ((0 , xK_m), spawn "amixer set Master toggle")  --toggle amixer mute
-       , ((0 , xK_t), spawn "translate `xclip -o` | xargs -0 notify-send && xclip -o | cut -c 1- >> ~/Documents/books/remember_word.txt")  --toggle amixer mute
+       --, ((0 , xK_t), spawn "translate \"`xclip -o`\" | xargs -0 notify-send && xclip -o | paste -s >> ~/Documents/books/remember_word.txt")  
+       , ((0 , xK_t), spawn "translate \"`xclip -o`\" | xargs -0 notify-send ") -- faster translate 
        , ((0 , xK_f), AL.launchApp def "firefox")  --a prompt search for firefox
-       , ((0 , xK_1), windows $ W.greedyView "1:home")
-       , ((0 , xK_2), windows $ W.greedyView "2:web")
-       , ((0 , xK_3), windows $ W.greedyView "3:term")
-       , ((0 , xK_4), windows $ W.greedyView "4:term")
-       , ((0 , xK_5), windows $ W.greedyView "5:write")
-       , ((0 , xK_6), windows $ W.greedyView "6:paint")
-       , ((0 , xK_7), windows $ W.greedyView "7:vbox")
-       , ((0 , xK_8), windows $ W.greedyView "8:monitor")
-       , ((0 , xK_9), windows $ W.greedyView "9:music")
+       , ((0 , xK_1), windows $ W.greedyView "FSL1")
+       , ((0 , xK_2), windows $ W.greedyView "FSL2")
+       , ((0 , xK_3), windows $ W.greedyView "FSL3")
+       , ((0 , xK_4), windows $ W.greedyView "FSL4")
+       , ((0 , xK_5), windows $ W.greedyView "FSL5")
+       , ((0 , xK_6), windows $ W.greedyView "FSL6")
+       , ((0 , xK_7), windows $ W.greedyView "FSL7")
+       , ((0 , xK_8), windows $ W.greedyView "FSL8")
+       , ((0 , xK_9), windows $ W.greedyView "FSL9")
        ])
 -- sub key a ------------------------------------------------------------------------------- jump layout
 --    , ((mod4Mask , xK_a), submap . M.fromList $
@@ -359,25 +357,26 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
 ---workspace---------------------------------------------------------{{{
 --myWorkspaces = ["1:Home","2:Float","3:Program","4:Browser","5:Terminal","6:Writer","7:Vbox","8:Monitor","9:Music"]-- }}}
 myWorkspaces :: Forest String
-myWorkspaces = [ Node "1:Home" [] -- a workspace for your browser
-               , Node "2:Browser" []
-               , Node "3:Vbox" []
-               , Node "4:Float" []
-               , Node "5:Writer" []       
-               , Node "6:Terminal" []
-               , Node "7:Program" []
-               , Node "8:Monitor" []
-               , Node "9:Music" []
+myWorkspaces = [ Node "FSL1" [] -- a workspace for your browser
+               , Node "FSL2" []
+               , Node "FSL3" []
+               , Node "FSL4" []
+               , Node "FSL5" []       
+               , Node "FSL6" []
+               , Node "FSL7" []
+               , Node "FSL8" []
+               , Node "FSL9" []
                ]
 
 myts = TSConfig { ts_hidechildren = True
                            --, ts_background   = 0x00000000
-                           , ts_background   = 0xffd4d4d4
+                           -- , ts_background   = 0xffd4d4d4
+                           , ts_background   = 0xff1C2B40
                            , ts_font         = "xft:Sans-16"
-                           , ts_node         = (0xff000000, 0xffd4d4d4)
-                           , ts_nodealt      = (0xff000000, 0xffd4d4d4)
-                           , ts_highlight    = (0xffff0000, 0xffd4d4d4)
-                           , ts_extra        = 0xff000000
+                           , ts_node         = (0xff839496, 0xff1C2B40)
+                           , ts_nodealt      = (0xff839496, 0xff1C2B40)
+                           , ts_highlight    = (0xffFF9100, 0xff1C2B40)
+                           , ts_extra        = 0xff839496
                            , ts_node_width   = 180
                            , ts_node_height  = 40
                            , ts_originX      = 500
