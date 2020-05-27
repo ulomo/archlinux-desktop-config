@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#ps:之前使用的是help命名的，但是fish shell中的帮助信息为help与这个脚本名冲突了，所以改为了manual
+curl cht.sh/${1}
