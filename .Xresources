@@ -1,10 +1,11 @@
 ! scroll
 XTerm*saveLines: 1000
-XTerm*scrollBar: true
-XTerm*rightScrollBar: false
+XTerm*scrollBar: false
+XTerm*rightScrollBar: true
 XTerm*scrollbar.thickness: 4
-XTerm*scrollbar.background: #585eaa
-XTerm*scrollbar.foreground: #f47a55
+XTerm*scrollbar.background: #54537f
+XTerm*scrollbar.foreground: #417df1 
+
 
 ! white space around
 XTerm*internalBorder: 8
@@ -31,16 +32,21 @@ XTerm.vt100.colorUL: #78cdd1
 
 ! disable bold font faces, use color instead
 XTerm.vt100.colorBDMode: true
-XTerm.vt100.colorBD: #f3715c
+XTerm.vt100.colorBD: #6766a9
 
 
-! keybind: clipboard
+! keybind: adjust-font-size click-action use-clipboard open-url scroll-page
 XTerm*VT100.Translations: #override \n\
-<BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Ctrl <Key> minus: smaller-vt-font() \n\
+Ctrl <Key> plus: larger-vt-font() \n\
+Ctrl <Key> 0: set-vt-font(d) \n\
+<Btn1Up>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+<Btn3Down>: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
 Shift Ctrl <Key> C: copy-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
-Shift Ctrl <Key> V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0)
-
-URxvt.perl-ext-comon:default,clipboard
+Shift Ctrl <Key> V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER0) \n\
+Ctrl <Btn1Down>: exec-formatted("xdg-open '%t'", CLIPBOARD) \n\
+<KeyPress> Home : scroll-to(begin) \n\
+<KeyPress> End  : scroll-to(end) 
 
 
 ! define color
@@ -57,14 +63,14 @@ XTerm*colorIT: #78cdd1
 *.color1:  #C4A000
 *.color9: #FCE94F
 
-*.color2:  #f58f98 
+*.color2:  #d7989e
 *.color10: #f173ac
 
 *.color3:  #4bd129  
 *.color11:  #8bd129
 
 *.color4:  #4e72b8
-*.color12: #7bbfea
+*.color12: #80aecb
 
 *.color5:  #75507B
 *.color13: #AD7FA8
