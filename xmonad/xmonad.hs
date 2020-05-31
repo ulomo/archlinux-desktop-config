@@ -10,7 +10,6 @@
 --import XMonad
 import System.IO
 import XMonad.Actions.CycleWS  --movie/cycle windows between workspaces
-import XMonad.Actions.SimpleDate  --popup the date with dzen2
 import XMonad.Actions.Submap  --create a sub-mapping of key bindings
 import XMonad.Actions.NoBorders   --used in all window
 import XMonad.Actions.FloatKeys  --position window with float
@@ -35,7 +34,6 @@ import XMonad.Hooks.WorkspaceHistory
 import XMonad.Layout.PerWorkspace --diff workspace has diff layout
 import XMonad.Actions.DynamicProjects --goto workspace with apps open up
 import XMonad.Util.Run -- runinterm for workspace
-import XMonad.Layout.SimplestFloat --used to float one whole workspace,this one works much better
 ---shift to window/float window/manage dock
 import XMonad.ManageHook
 import XMonad.Hooks.ManageDocks  --toggle xmobar hidden
@@ -44,11 +42,8 @@ import Control.Monad (liftM2)
 import XMonad.Util.NamedScratchpad
 --layout
 import XMonad.Layout.Maximize  --toggle fullscreen
-import XMonad.Layout.CenteredMaster
 import XMonad.Layout.Grid
-import XMonad.Layout.Dishes
 import XMonad.Layout.OneBig
-import XMonad.Layout.Accordion
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ToggleLayouts --toggle layout
 import XMonad.Layout.SubLayouts --sub layout
@@ -75,15 +70,15 @@ main = do
 
 myConfig = defaultConfig { modMask = mod4Mask
 						 , borderWidth = 0
-						 , normalBorderColor  = "#eedfdf" 
-						 , focusedBorderColor = "#eedfdf"
+						 -- , normalBorderColor  = "#eedfdf" 
+						 -- , focusedBorderColor = "#eedfdf"
                          , terminal = myTerminal
 						 , workspaces = toWorkspaces myWorkspaces --tree select support
                          , focusFollowsMouse = False
                          , mouseBindings = myMouseBindings 
                          , layoutHook = avoidStruts $ myLayoutHook 
                          , logHook = workspaceHistoryHook 
-						 , manageHook = myManageHook <+> manageHook defaultConfig <+> insertPosition End Newer <+> namedScratchpadManageHook myScratchPads
+						 , manageHook = myManageHook <+> manageHook defaultConfig <+> insertPosition End Newer <+> namedScratchpadManageHook myScratchPads <+> doF W.swapUp
                           }`additionalKeys` myKeys
 
 
@@ -93,27 +88,33 @@ projects :: [Project] ----------------------------------------------------------
 projects =
   [ Project { projectName      = "FSL9"
             , projectDirectory = "~/Music"
-            , projectStartHook = Just $ do runInTerm "-name cmus" "cmsus"
+            , projectStartHook = Just $ do runInTerm "-name cmus" "cmus"
                                            --spawn "netease-cloud-music"
                                            runInTerm "-name cava" "cava"
                                            runInTerm "-name cava" "cava"
             }
+            { projectName      = "FSL8"
+            , projectStartHook = Just $ do runInTerm "-name nload" "nload"
+                                           runInTerm "-name htop" "htop"
+                                           runInTerm "-name iotop" "sudo iotop"
+                                           runInTerm "-name glances" "glances"
+            }
   ]
 
 -- app station
-myManageHook = composeAll
+myManageHook = composeAll 
 		[ className =? "netease-cloud-music"			--> viewShift "FSL9"
-		, className =? "netease-cloud-music"			--> doF W.swapDown  --wow it is amazing,it make windows down,and suit for workspace5,which make music in the middle,really really nice
+		, className =? "netease-cloud-music"			--> doF W.swapDown --wow it is amazing,it make windows down,and suit for workspace5,which make music in the middle,really really nice
 		, className =? "mplayer"						--> doIgnore
    		, className =? "firefox" 						--> viewShift "FSL2" --open window and shift to window
-   		, className =? "firefox" 						--> doFloat
-   		, className =? "firefox" 						--> doF W.swapMaster
+   		--, className =? "firefox" 						--> doFloat
+   		, className =? "firefox" 						--> doF W.swapUp
    		, className =? "Typora" 						--> viewShift "FSL3" 
    		, className =? "Typora" 						--> doFloat
    		, className =? "Thunar"    						--> doFloat
-   		, className =? "VirtualBox" 					--> viewShift "FSL5" 
-   		, className =? "VirtualBox" 					--> doFloat
-   		, className =? "VirtualBox"						--> doF W.swapMaster
+   		, className =? "VirtualBox" 					--> viewShift "FSL4" 
+   		--, className =? "VirtualBox" 					--> doFloat
+   		, className =? "VirtualBox"						--> doF W.swapUp
    		, manageDocks
    		]
 	where viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -124,42 +125,45 @@ myLayoutHook =  hiddenWindows
             $  maximizeWithPadding 0
             $  minimize 
             $  windowNavigation
-            -- $  noFrillsDeco shrinkText topBarTheme
-            -- $  addTabs shrinkText myTabTheme
+            $  noFrillsDeco shrinkText topBarTheme
+            $  addTabs shrinkText myTabTheme
             $  spacingWithEdge 2
 			$  subLayout [0,1,2] (Simplest)
-			-- $  onWorkspace "4:Float" simplestFloat
+			$  onWorkspace "FSL8" (OneBig (3/4) (3/4))
 			$  onWorkspace "FSL9" three
-			$  toggleLayouts talldiff tallsame  ||| Grid ||| noBorders Full ||| three
+			-- $  toggleLayouts talldiff tallsame  ||| Grid ||| noBorders Full ||| three 
+			$  toggleLayouts talldiff tallsame  ||| Grid ||| three 
 tallsame	 = ResizableTall 1 (1/100) (1/2) []
 talldiff	 = ResizableTall 1 (1/100) (2/3) [] 
-three		 = ThreeColMid 1 (3/100) (1/2)-- }}}
+three		 = ThreeColMid 1 (3/100) (1/2)
 
 
 --  theme
 topBarTheme = def
-     { activeColor = "#FF7F24"
-     , activeBorderColor = "#FF7F24"
-     , activeTextColor = "#FF7F24"
-     , inactiveColor = "#00868B"
-     , inactiveBorderColor = "#00868B"
-     , inactiveTextColor = "#00868B"
-     , urgentColor = "#9AFF9A"
-     , urgentBorderColor = "#9AFF9A"
-     , urgentTextColor = "#C1C1C1"
-     , decoHeight = 4
+     { activeColor = "#4f4e83"
+    , activeBorderColor = "#4f4e83"
+    , activeTextColor = "#4f4e83"
+    , inactiveColor = "#323353"
+    , inactiveBorderColor = "#323353"
+    , inactiveTextColor = "#323353"
+    , urgentColor = "#9AFF9A"
+    , urgentBorderColor = "#9AFF9A"
+    , urgentTextColor = "#C1C1C1"
+    , decoHeight = 4
+    , fontName =   "xft:iosevka-10"
     }
 myTabTheme = def
-     { activeColor           = "#FF7F24"
-     , inactiveColor         = "#00868B"
-     , activeBorderColor     = "#FF7F24"
-     , inactiveBorderColor   = "#00868B"
-     , activeTextColor       = "#FF7F24" 
-     , inactiveTextColor     = "#00868B"
+    { activeColor           = "#4f4e83"
+    , inactiveColor         = "#323353"
+    , activeBorderColor     = "#4f4e83"
+    , inactiveBorderColor   = "#323353"
+    , activeTextColor       = "#4f4e83" 
+    , inactiveTextColor     = "#323353"
      , urgentColor = "#9AFF9A"
      , urgentBorderColor = "#9AFF9A"
      , urgentTextColor = "#C1C1C1"
-     , decoHeight = 8
+     , decoHeight = 6
+     , fontName =   "xft:iosevka-10"
      }
 
 
@@ -172,37 +176,32 @@ myKeys =
     , ((mod4Mask, xK_F6), spawn "xinput disable 14")
     , ((mod4Mask, xK_n  ), spawn "xterm")  --new terminal
     , ((mod4Mask, xK_r  ), spawn "rofi -lines 4  -show drun -show-icons -theme android_notification.rasi -eh 2")  --show date usr dzen2
-    , ((mod4Mask .|. shiftMask, xK_z), spawn "betterlockscreen  ~/Picture/background/healer.jpg -l -b 1 dim")  --lock screen
     , ((mod4Mask, xK_b), sendMessage ToggleStruts) --toggle status bar
 -- navigate key
+    -- redefine the default moveing key
+    , ((mod4Mask, xK_j), sendMessage $ Go D)
+    , ((mod4Mask, xK_k), sendMessage $ Go U)
     , ((mod4Mask, xK_l), sendMessage $ Go R)
     , ((mod4Mask, xK_h), sendMessage $ Go L)
+    -- methords to find the key's name use:  xev | sed -ne '/^KeyPress/,/^$/p' then press the key
+    -- the key used for sublayout which compressed
+    , ((mod4Mask, xK_bracketleft), onGroup W.focusUp')
+    , ((mod4Mask, xK_bracketright), onGroup W.focusDown')
     , ((mod4Mask .|. mod1Mask, xK_i  ), sendMessage MirrorShrink)  --vertical shrink window
     , ((mod4Mask .|. mod1Mask, xK_o  ), sendMessage MirrorExpand)  --vertical expand window
     , ((mod4Mask .|. mod1Mask, xK_h  ), sendMessage Shrink)
     , ((mod4Mask .|. mod1Mask, xK_l  ), sendMessage Expand)
     , ((mod4Mask .|. shiftMask, xK_m), windows W.swapMaster)  --move window to master
-    , ((mod4Mask, xK_y), withFocused hideWindow) --hide window
-    , ((mod4Mask .|. shiftMask, xK_y), popOldestHiddenWindow) -- show hidden window
+    , ((mod4Mask, xK_0), withFocused hideWindow) --hide window
+    , ((mod4Mask .|. shiftMask, xK_0), popOldestHiddenWindow) -- show hidden window
     , ((mod4Mask, xK_g  ), withFocused toggleBorder)  --togger window border
     , ((mod4Mask, xK_f  ), withFocused (sendMessage . maximizeRestore))  --toggle full window
-    , ((mod1Mask, xK_Tab  ), toggleWS)  --toggle workspace in order
+    , ((mod1Mask, xK_Tab  ), toggleWS)  --cycle workspace
     , ((mod4Mask, xK_t), sendMessage ToggleLayout)  --toggle window frame
     , ((mod4Mask, xK_BackSpace), kill)  --kill window
     , ((mod4Mask, xK_w), treeselectWorkspace myts myWorkspaces W.greedyView)  --sellect treeworkspace
-    , ((mod4Mask, xK_p), spawn "flameshot full -p ~/Pictures/screenshot")  --new terminal
--- funcation key
-    , ((mod4Mask .|. shiftMask, xK_g     ), windowPrompt 
-                                       def { autoComplete = Just 500000 }
-                                       Goto allWindows)
-    , ((mod4Mask .|. shiftMask, xK_b     ), windowPrompt 
-                                       def { autoComplete = Just 500000 }
-                                       Bring allWindows)
--- scratchpad
-    , ((mod4Mask, xK_u), namedScratchpadAction myScratchPads "terminal" )
-    , ((mod4Mask, xK_i), namedScratchpadAction myScratchPads "topTerm" )
-    , ((mod4Mask, xK_o), namedScratchpadAction myScratchPads "bottomRightTerm" )
-    , ((mod4Mask, xK_v), namedScratchpadAction myScratchPads "leftTerm" )
+    , ((mod4Mask, xK_p), spawn "flameshot full -p ~/Pictures/screenshot")  --fullscreen capture
+
 -- sub key s ----------------------------------------------------------------------------- used for navigate
     , ((mod4Mask , xK_s), submap . M.fromList $
        [ ((0 , xK_j), nextWS)  --jump to next workspace 
@@ -225,21 +224,20 @@ myKeys =
        , ((0 , xK_m), withFocused (sendMessage . MergeAll))
        , ((0 , xK_u), withFocused (sendMessage . UnMerge))
        
-       , ((0 , xK_period), onGroup W.focusUp')
-       , ((0 , xK_comma), onGroup W.focusDown')
+       -- , ((0 , xK_period), onGroup W.focusUp')
+       -- , ((0 , xK_comma), onGroup W.focusDown')
        ])
 -- sub key \ ----------------------------------------------------------------------------- used for launch app
     , ((mod4Mask , xK_backslash), submap . M.fromList $
        [ ((0 , xK_v), spawn "obs --minimize-to-tray")  --start video record app
-       , ((0 , xK_p), spawn "flameshot &")  --start screen capture app
+       , ((0 , xK_p), spawn "flameshot")  --start screen capture app
 	   , ((0 , xK_s), spawn "rofi -show ssh -show-icons -theme lb.rasi -terminal xterm")  --launch ssh connect window
-       , ((0 , xK_b), spawn "~/Documents/script/shell/changeDesktopBg.sh") --run change desktop picture program
        , ((0 , xK_k), spawn "~/.local/bin/showkey") --toggle screenkey program on or off
-       , ((0 , xK_o), spawn "pkill changeDesktopBg ; pkill sleep") --stop change desktop picture program 
        , ((0 , xK_r), spawn "pkill polybar; polybar -r -q mybar >/dev/null 2>&1 &") --stop change desktop picture program 
        , ((0 , xK_m), spawn "amixer set Master toggle")  --toggle amixer mute
+       , ((0 , xK_l), spawn "slock")  --lock screen
        --, ((0 , xK_t), spawn "translate \"`xclip -o`\" | xargs -0 notify-send && xclip -o | paste -s >> ~/Documents/books/remember_word.txt")  
-       , ((0 , xK_t), spawn "translate \"`xclip -o`\" | xargs -0 notify-send ") -- faster translate 
+       , ((0 , xK_t), spawn "translate \"`xclip -o`\"") -- faster translate 
        , ((0 , xK_f), AL.launchApp def "firefox")  --a prompt search for firefox
        , ((0 , xK_1), windows $ W.greedyView "FSL1")
        , ((0 , xK_2), windows $ W.greedyView "FSL2")
@@ -251,6 +249,10 @@ myKeys =
        , ((0 , xK_8), windows $ W.greedyView "FSL8")
        , ((0 , xK_9), windows $ W.greedyView "FSL9")
        ])
+-- scratchpad
+    , ((mod4Mask, xK_u), namedScratchpadAction myScratchPads "terminal" )
+    , ((mod4Mask, xK_i), namedScratchpadAction myScratchPads "topTerm" )
+    , ((mod4Mask, xK_o), namedScratchpadAction myScratchPads "thinTerm" )
     ]
 
 
@@ -262,49 +264,37 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
 -------------------------------------------------------------------------------------------- scratch window
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
-                -- NS "terminal" "kitty" (className =? "kitty") manageTerm
-
                 , NS "topTerm" spawnTerm1  findTerm1 manageTerm1
---                , NS "bottomLeftTerm" spawnTerm2  findTerm2 manageTerm2
-                , NS "bottomRightTerm" spawnTerm3  findTerm3 manageTerm3
-                , NS "leftTerm" spawnTerm4  findTerm4 manageTerm4
+                , NS "thinTerm" spawnTerm2  findTerm2 manageTerm2
 		        ]
 	where
-    spawnTerm = myTerminal ++  " -name centerTerm" ----------------------------------------- center terminal
-    findTerm = resource =? "centerTerm"
+    spawnTerm = myTerminal ++  " -name terminal" 
+    findTerm = resource =? "terminal"
     manageTerm = customFloating $ W.RationalRect l t w h 
 		where
         h = 0.85 
         w = 0.9
-        t = 0.07      -- bottom edge
+        t = 0.07      -- top
         l = 0.05      -- left
 
-    spawnTerm1 = myTerminal ++  " -name popupterm" ----------------------------------------- command terminal
-    findTerm1 = resource =? "popupterm"
+    spawnTerm1 = myTerminal ++  " -name topterm"
+    findTerm1 = resource =? "topterm"
     manageTerm1 = customFloating $ W.RationalRect l t w h 
 		where
         h = 0.2     --hight
         w = 1.0     --width
-        t = 0.02    -- bottom edge
+        t = 0.02    --top 
         l = 0.0     -- left
 
-    spawnTerm3 = myTerminal ++  " -name brterm" ----------------------------------------------- bottom right terminal
-    findTerm3 = resource =? "brterm"
-    manageTerm3 = customFloating $ W.RationalRect l t w h 
+    spawnTerm2 = myTerminal ++  " -name thinterm" 
+    findTerm2 = resource =? "thinterm"
+    manageTerm2 = customFloating $ W.RationalRect l t w h 
 		where
-        h = 0.15    --hight
-        w = 0.25    --width
-        t = 0.1   -- bottom edge
-        l = 0.748     -- left
+        h = 0.04    --hight
+        w = 0.70    --width
+        t = 0.03    -- top
+        l = 0.15    -- left
 
-    spawnTerm4 = myTerminal ++  " -name topcterm" --------------------------------------------- top center terminal
-    findTerm4 = resource =? "topcterm"
-    manageTerm4 = customFloating $ W.RationalRect l t w h 
-		where
-        h = 0.96     --hight
-        w = 0.5     --width
-        t = 0.04     -- bottom edge
-        l = 0.25    -- left}}}
 
 
 ---workspace
@@ -323,7 +313,7 @@ myWorkspaces = [ Node "FSL1" []
 
 myts = TSConfig { ts_hidechildren = True
                            , ts_background   = 0xff1C2B40
-                           , ts_font         = "xft:Sans-16"
+                           , ts_font         = "xft:WenQuanYi Micro Hei-14"
                            , ts_node         = (0xff839496, 0xff1C2B40)
                            , ts_nodealt      = (0xff839496, 0xff1C2B40)
                            , ts_highlight    = (0xffFF9100, 0xff1C2B40)
