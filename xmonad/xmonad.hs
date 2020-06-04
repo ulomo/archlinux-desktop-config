@@ -78,7 +78,9 @@ myConfig = defaultConfig { modMask = mod4Mask
                          , mouseBindings = myMouseBindings 
                          , layoutHook = avoidStruts $ myLayoutHook 
                          , logHook = workspaceHistoryHook 
-						 , manageHook = myManageHook <+> manageHook defaultConfig <+> insertPosition End Newer <+> namedScratchpadManageHook myScratchPads <+> doF W.swapUp
+                         --1. add doF W.swpaUp make all pop up window in the front 
+						 , manageHook = myManageHook <+> manageHook defaultConfig <+> insertPosition End Newer 
+                            <+> namedScratchpadManageHook myScratchPads <+> doF W.swapUp 
                           }`additionalKeys` myKeys
 
 
@@ -138,34 +140,6 @@ talldiff	 = ResizableTall 1 (1/100) (2/3) []
 three		 = ThreeColMid 1 (3/100) (1/2)
 
 
---  theme
-topBarTheme = def
-     { activeColor = "#4f4e83"
-    , activeBorderColor = "#4f4e83"
-    , activeTextColor = "#4f4e83"
-    , inactiveColor = "#323353"
-    , inactiveBorderColor = "#323353"
-    , inactiveTextColor = "#323353"
-    , urgentColor = "#9AFF9A"
-    , urgentBorderColor = "#9AFF9A"
-    , urgentTextColor = "#C1C1C1"
-    , decoHeight = 4
-    , fontName =   "xft:iosevka-10"
-    }
-myTabTheme = def
-    { activeColor           = "#4f4e83"
-    , inactiveColor         = "#323353"
-    , activeBorderColor     = "#4f4e83"
-    , inactiveBorderColor   = "#323353"
-    , activeTextColor       = "#4f4e83" 
-    , inactiveTextColor     = "#323353"
-     , urgentColor = "#9AFF9A"
-     , urgentBorderColor = "#9AFF9A"
-     , urgentTextColor = "#C1C1C1"
-     , decoHeight = 6
-     , fontName =   "xft:iosevka-10"
-     }
-
 
 -------------------------------------------------------------------------------------------- key bending
 myKeys =
@@ -175,7 +149,8 @@ myKeys =
     , ((mod1Mask, xK_F5), spawn "xbacklight -inc 2")
     , ((mod4Mask, xK_F6), spawn "xinput disable 14")
     , ((mod4Mask, xK_n  ), spawn "xterm")  --new terminal
-    , ((mod4Mask, xK_r  ), spawn "rofi -lines 4  -show drun -show-icons -theme android_notification.rasi -eh 2")  --show date usr dzen2
+    --, ((mod4Mask, xK_r  ), spawn "rofi -lines 4  -show drun -show-icons -theme android_notification.rasi -eh 2")  --show date usr dzen2
+    , ((mod4Mask, xK_r  ), spawn "dmenu_run -fn 'WenQuanYi Micro Hei-12' -p '》'")  --show date usr dzen2
     , ((mod4Mask, xK_b), sendMessage ToggleStruts) --toggle status bar
 -- navigate key
     -- redefine the default moveing key
@@ -312,11 +287,11 @@ myWorkspaces = [ Node "FSL1" []
 
 
 myts = TSConfig { ts_hidechildren = True
-                           , ts_background   = 0xff1C2B40
+                           , ts_background   = 0xdd1C2B40
                            , ts_font         = "xft:WenQuanYi Micro Hei-14"
-                           , ts_node         = (0xff839496, 0xff1C2B40)
-                           , ts_nodealt      = (0xff839496, 0xff1C2B40)
-                           , ts_highlight    = (0xffFF9100, 0xff1C2B40)
+                           , ts_node         = (0xff839496, 0xdd1C2B40)
+                           , ts_nodealt      = (0xff839496, 0xdd1C2B40)
+                           , ts_highlight    = (0xffFF9100, 0xdd1C2B40)
                            , ts_extra        = 0xff839496
                            , ts_node_width   = 180
                            , ts_node_height  = 40
@@ -339,3 +314,49 @@ myts = TSConfig { ts_hidechildren = True
                                 , ((0, xK_i),      moveHistForward)
                                 ]
                }
+
+
+--  theme
+-- topBarTheme = def
+--      { activeColor = "#4f4e83"
+--     , activeBorderColor = "#4f4e83"
+--     , activeTextColor = "#4f4e83"
+--     , inactiveColor = "#323353"
+--     , inactiveBorderColor = "#323353"
+--     , inactiveTextColor = "#323353"
+--     , decoHeight = 4
+--     , fontName =   "xft:iosevka-10"
+--     }
+-- myTabTheme = def
+--     { activeColor           = "#4f4e83"
+--     , inactiveColor         = "#323353"
+--     , activeBorderColor     = "#4f4e83"
+--     , inactiveBorderColor   = "#323353"
+--     , activeTextColor       = "#4f4e83" 
+--     , inactiveTextColor     = "#323353"
+--      , decoHeight = 6
+--      , fontName =   "xft:iosevka-10"
+--      }
+
+--  theme
+topBarTheme = def
+     { activeColor 	    = "#4e7397"
+    , activeBorderColor     = "#4e7397"
+    , activeTextColor	    = "#4e7397"
+    , inactiveColor	    = "#3d5266"
+    , inactiveBorderColor   = "#3d5266"
+    , inactiveTextColor     = "#3d5266"
+    , decoHeight 	    = 4
+    , fontName		    =   "xft:iosevka-10"
+    }
+myTabTheme = def
+    { activeColor           = "#4e7397"
+    , inactiveColor         = "#3d5266"
+    , activeBorderColor     = "#4e7397"
+    , inactiveBorderColor   = "#3d5266"
+    , activeTextColor       = "#4e7397" 
+    , inactiveTextColor     = "#3d5266"
+     , decoHeight	    = 6
+     , fontName		    = "xft:iosevka-10"
+     }
+
