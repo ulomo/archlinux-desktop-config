@@ -118,15 +118,15 @@ runtime! archlinux.vim
 		Plug 'kien/rainbow_parentheses.vim' "彩虹括号
 		Plug 'Yggdroot/indentLine' "python代码分隔线
 ""		Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' } "用来提供python语法检查
-        Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' } "自动补全
+        "Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' } "自动补全
         Plug 'mattn/emmet-vim'
         Plug 'jiangmiao/auto-pairs'
 		call plug#end()
 
 "-----------------------------------------------------------------------------------------------
 "airline theme's setting
-		let g:airline_theme='bubblegum'
-		""let g:airline_theme='powerlineish'
+		"let g:airline_theme='bubblegum'
+		let g:airline_theme='deus'
 		let g:airline#extensions#tabline#enabled = 1
 		let g:airline#extensions#tabline#left_sep = ' '
 		let g:airline#extensions#tabline#left_alt_sep = '|'

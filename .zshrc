@@ -2,28 +2,18 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/narcissus/.oh-my-zsh"
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="random"
-#ZSH_THEME="flazz"
-#ZSH_THEME="jispwoso"
-#ZSH_THEME="duellj"
-#ZSH_THEME="jonathan"
-#ZSH_THEME="blinks"
-#ZSH_THEME="robbyrussell"
-#ZSH_THEME="edvardm"
-ZSH_THEME="sunrise"
-#ZSH_THEME="agnoster"
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
@@ -31,10 +21,10 @@ ZSH_THEME="sunrise"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
- HYPHEN_INSENSITIVE="true"
+# HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
- DISABLE_AUTO_UPDATE="true"
+# DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
 # DISABLE_UPDATE_PROMPT="true"
@@ -52,10 +42,10 @@ ZSH_THEME="sunrise"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
- ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
- COMPLETION_WAITING_DOTS="true"
+# COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -74,20 +64,20 @@ ZSH_THEME="sunrise"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-		git 
-		vi-mode 
-		zsh-syntax-highlighting 
-		#zsh-autosuggestions 
-		colored-man-pages
-)
+plugins=(git
+    vi-mode
+    zsh-syntax-highlighting
+    #zsh-autosuggestions
+    colored-man-pages
+    docker
+    )
 
 source $ZSH/oh-my-zsh.sh
-#PS1="%{$fg[yellow]%}$USER%{$fg[green]%} %~%{$reset_color%}> "
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -113,30 +103,19 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias trs='~/.local/bin/translate'
-alias hexo='cd ~/Documents/hexo && hexo'
-alias search='pacman -Ss'
-alias install='sudo pacman -S'
-alias update='sudo pacman -Sy'
-alias upgrade='sudo pacman -Syu'
-alias uninstall='sudo pacman -Rsn'
-alias pycharm='export _JAVA_AWT_WM_NONREPARENTING=1 && ~/Software/pycharm/pycharm-2019.3.3/bin/pycharm.sh &>/dev/null &'
-#-------------------------------set cursor----------------------------
-#used to change the xterm cursor
-#echo -e -n "\x1b[\x30 q" # changes to blinking block
-#echo -e -n "\x1b[\x31 q" # changes to blinking block also
-#echo -e -n "\x1b[\x32 q" # changes to steady block
-#echo -e -n "\x1b[\x33 q" # changes to blinking underline
-#echo -e -n "\x1b[\x34 q" # changes to steady underline
-#echo -e -n "\x1b[\x35 q" # changes to blinking bar
-#echo -e -n "\x1b[\x36 q" # changes to steady bar
-#
-[ -n "$XTERM_VERSION" ] && transset-df --id "$WINDOWID" --dec 0.1 >/dev/null
-
-PATH="/home/narcissus/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/narcissus/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/narcissus/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/narcissus/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/narcissus/perl5"; export PERL_MM_OPT;
+alias install="sudo pacman -S"
+alias yinstall="yay -S"
+alias search="pacman -Ss"
+alias ysearch="yay -Ss"
+alias update="sudo pacman -Sy"
+alias yupdate="yay -Sy"
+alias uninstall="sudo pacman -Rsn"
+alias yuninstall="yay -Rsn"
+alias docker="sudo docker"
 
 
+# import syntax plugin
+source /home/fsl/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# make xterm transparent
+[ -n "$XTERM_VERSION" ] && transset-df -m 0.8 --id "$WINDOWID" --dec 0.2 >/dev/null
