@@ -93,6 +93,7 @@ modkey+\+t #对选中的词进行翻译，并循环提醒。需要插件和配�
 
 ![desktop](https://raw.githubusercontent.com/ulomo/archlinux-desktop-config/master/desktop.png)
 
+![newpic](https://raw.githubusercontent.com/ulomo/archlinux-desktop-config/master/new.png)
 
 
 
