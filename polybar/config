@@ -13,9 +13,11 @@
 #background-alt = #444c
 #foreground = #222
 
-background = #1C2B40
-background-alt = #282828
-foreground = #298146
+#background = #1C2B40aa
+background = #111315f0
+background-alt = #282828aa
+#foreground = #298146
+foreground = #b9b19f
 
 foreground-alt = #555
 primary = #ffb52a
@@ -36,8 +38,8 @@ line-size = 0
 line-color = #ffb52a
 border-size = 0
 border-color = #00000000
-padding-left = 2
-padding-right = 2
+padding-left = 3
+padding-right = 3
 module-margin-left = 3
 module-margin-right = 3
 
@@ -49,8 +51,8 @@ font-1 = "FontAwesome:size=11;4"
 #-----------------------------------------------------------------------------------------}}}
 
 #------------------------------icon position setting--------------------------------------{{{
-modules-left = battery backlight pulseaudio bluetooth docker 
-modules-center = date check
+modules-left = battery backlight pulseaudio bluetooth docker
+modules-center = date 
 modules-right = wlan fan temperature cpu memory 
 
 tray-position = right
@@ -341,25 +343,34 @@ screenchange-reload = true
 ;compositing-foreground = source
 ;compositing-border = over
 ;pseudo-transparency = false
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------wm         module------------------------------------------{{{
+
 [global/wm]
 margin-top = 0
 margin-bottom = 5
-#-----------------------------------------------------------------------------------------}}}
+
+
 
 [module/fan]
 type = custom/script
-exec = ~/.config/polybar/c_script/fan
+exec = echo "  `cat /sys/devices/platform/asus-nb-wmi/hwmon/hwmon?/fan1_input` RPM"
 
 [module/docker]
 type = custom/script
-exec = ~/.config/polybar/c_script/docker
+exec = ~/.config/polybar/docker
 
 [module/bluetooth]
 type = custom/script
-exec = ~/.config/polybar/c_script/bluetooth
+exec = ~/.config/polybar/bluetooth
 
 [module/check]
 type = custom/script
-exec = ~/.config/polybar/c_script/check
+exec = ~/.config/polybar/check
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+[module/xmonad]
+type = custom/script
+exec = xmonad-log
+tail = true
