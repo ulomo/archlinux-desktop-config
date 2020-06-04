@@ -88,7 +88,7 @@
 
     ### Text ###
 
-    font = Monospace 12
+    font = Monospace 14
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
@@ -165,7 +165,7 @@
     icon_position = left
 
     # Scale larger icons down to this size, set to 0 to disable
-    max_icon_size = 32
+    max_icon_size = 16
 
     # Paths to default icons.
     #icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
@@ -190,7 +190,7 @@
     browser = /usr/bin/firefox -new-tab
 
     # Always run rule-defined scripts, even if the notification is suppressed
-    always_run_script = true
+    always_run_script = false
 
     # Define the title of the windows spawned by dunst
     title = Dunst
@@ -201,7 +201,7 @@
     # Print a notification on startup.
     # This is mainly for error detection, since dbus (re-)starts dunst
     # automatically after a crash.
-    startup_notification = true
+    startup_notification = false
 
     # Manage dunst's desire for talking
     # Can be one of the following values:
@@ -210,7 +210,7 @@
     #  mesg: Important Messages
     #  info: all unimportant stuff
     # debug: all less than unimportant stuff
-    verbosity = mesg
+    verbosity = info
 
     # Define the corner radius of the notification window
     # in pixel size. If the radius is 0, you have no rounded
@@ -279,28 +279,28 @@
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
-    background = "#c4ee3a"
+    background = "#92abc3"
     foreground = "#1d220c"
-    timeout = 5
+    timeout = 3
     # Icon for notifications with low urgency, uncomment to enable
-    #icon = /path/to/icon
+    icon = /usr/share/icons/Adwaita/16x16/status/dialog-information-symbolic.symbolic.png
 
 [urgency_normal]
     #background = "#dfdfdf"
     #foreground = "#1d220c"
     background = "#1c2b40"
-    foreground = "#5d93d4"
+    foreground = "#a7c068"
     timeout = 5
     # Icon for notifications with normal urgency, uncomment to enable
-    #icon = /path/to/icon
+    icon = /usr/share/icons/Adwaita/16x16/status/dialog-warning-symbolic.symbolic.png
 
 [urgency_critical]
     background = "#900000"
     foreground = "#ffffff"
     frame_color = "#ff0000"
-    timeout = 0
+    timeout = 20
     # Icon for notifications with critical urgency, uncomment to enable
-    #icon = /path/to/icon
+    icon = /usr/share/icons/Adwaita/16x16/status/dialog-error-symbolic.symbolic.png
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.
@@ -370,10 +370,10 @@
 #    msg_urgency = critical
 #    fullscreen = show
 
-[espeak]
-    summary = "*"
-    script = dunst_espeak.sh
-
+#[espeak]
+#    summary = "*"
+#    script = dunst_espeak.sh
+#
 #[script-test]
 #    summary = "*script*"
 #    script = dunst_test.sh
@@ -393,28 +393,28 @@
 #    summary = "foobar"
 #    skip_display = yes
 
-[signed_on]
-    appname = Pidgin
-    summary = "*signed on*"
-    urgency = critical
+#[signed_on]
+#    appname = Pidgin
+#    summary = "*signed on*"
+#    urgency = critical
+##
+#[signed_off]
+#    appname = Pidgin
+#    summary = *signed off*
+#    urgency = low
 #
-[signed_off]
-    appname = Pidgin
-    summary = *signed off*
-    urgency = low
-
-[says]
-    appname = Pidgin
-    summary = *says*
-    urgency = critical
+#[says]
+#    appname = Pidgin
+#    summary = *says*
+#    urgency = critical
 #
 #[twitter]
 #    appname = Pidgin
 #    summary = *twitter.com*
 #    urgency = normal
 #
-[stack-volumes]
-    appname = "some_volume_notifiers"
-    set_stack_tag = "volume"
+#[stack-volumes]
+#    appname = "some_volume_notifiers"
+#    set_stack_tag = "volume"
 #
  vim: ft=cfg
