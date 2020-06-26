@@ -50,6 +50,7 @@ import XMonad.Layout.SubLayouts --sub layout
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Simplest
 import XMonad.Actions.CopyWindow --copy window to all
+import XMonad.Layout.SimplestFloat --float workspace
 --jump to layout
 import XMonad hiding ( (|||) )
 import XMonad.Layout.LayoutCombinators
@@ -59,9 +60,22 @@ import XMonad.Actions.TreeSelect
 import XMonad.Hooks.WorkspaceHistory
 import qualified XMonad.StackSet as W
 
+-- for polybar info
+import Data.List (sortBy)
+import Data.Function (on)
+import Control.Monad (forM_, join)
+import XMonad.Util.Run (safeSpawn)
+import XMonad.Util.NamedWindows (getName)
+import qualified XMonad.StackSet as W
+
+
 
 --this is the method to toggle status bar: main add docks and layouthook add avoidStruts then bind a key to toggle status bar ,really nice
 main = do
+    forM_ [".xmonad-workspace-log", ".xmonad-title-log"] $ \file -> do --for polybar info
+        --safeSpawn "mkfifo" ["/tmp/" ++ file]
+        safeSpawn "mkfifo" ["/tmp/.xmonad-title-log","/tmp/.xmonad-workspace-log"]
+
 	xmonad 
 		$ docks  
 		$ dynamicProjects projects 
@@ -77,7 +91,8 @@ myConfig = defaultConfig { modMask = mod4Mask
                          , focusFollowsMouse = False
                          , mouseBindings = myMouseBindings 
                          , layoutHook = avoidStruts $ myLayoutHook 
-                         , logHook = workspaceHistoryHook 
+                         --, logHook = workspaceHistoryHook 
+                         , logHook = eventLogHook
                          --1. add doF W.swpaUp make all pop up window in the front 
 						 , manageHook = myManageHook <+> manageHook defaultConfig <+> insertPosition End Newer 
                             <+> namedScratchpadManageHook myScratchPads <+> doF W.swapUp 
@@ -129,10 +144,11 @@ myLayoutHook =  hiddenWindows
             $  windowNavigation
             $  noFrillsDeco shrinkText topBarTheme
             $  addTabs shrinkText myTabTheme
-            $  spacingWithEdge 2
+            $  spacingWithEdge 10
 			$  subLayout [0,1,2] (Simplest)
 			$  onWorkspace "FSL8" (OneBig (3/4) (3/4))
 			$  onWorkspace "FSL9" three
+			$  onWorkspace "FSL6" simplestFloat
 			-- $  toggleLayouts talldiff tallsame  ||| Grid ||| noBorders Full ||| three 
 			$  toggleLayouts talldiff tallsame  ||| Grid ||| three 
 tallsame	 = ResizableTall 1 (1/100) (1/2) []
@@ -168,7 +184,6 @@ myKeys =
     , ((mod4Mask .|. mod1Mask, xK_l  ), sendMessage Expand)
     , ((mod4Mask .|. shiftMask, xK_m), windows W.swapMaster)  --move window to master
     , ((mod4Mask, xK_0), withFocused hideWindow) --hide window
-    , ((mod4Mask .|. shiftMask, xK_0), popOldestHiddenWindow) -- show hidden window
     , ((mod4Mask, xK_g  ), withFocused toggleBorder)  --togger window border
     , ((mod4Mask, xK_f  ), withFocused (sendMessage . maximizeRestore))  --toggle full window
     , ((mod1Mask, xK_Tab  ), toggleWS)  --cycle workspace
@@ -208,12 +223,13 @@ myKeys =
        , ((0 , xK_p), spawn "flameshot")  --start screen capture app
 	   , ((0 , xK_s), spawn "rofi -show ssh -show-icons -theme lb.rasi -terminal xterm")  --launch ssh connect window
        , ((0 , xK_k), spawn "~/.local/bin/showkey") --toggle screenkey program on or off
-       , ((0 , xK_r), spawn "pkill polybar; polybar -r -q mybar >/dev/null 2>&1 &") --stop change desktop picture program 
+       , ((0 , xK_r), spawn "pkill polybar; polybar -r -q queen >/dev/null 2>&1 &") --stop change desktop picture program 
        , ((0 , xK_m), spawn "amixer set Master toggle")  --toggle amixer mute
        , ((0 , xK_l), spawn "slock")  --lock screen
        --, ((0 , xK_t), spawn "translate \"`xclip -o`\" | xargs -0 notify-send && xclip -o | paste -s >> ~/Documents/books/remember_word.txt")  
        , ((0 , xK_t), spawn "translate \"`xclip -o`\"") -- faster translate 
        , ((0 , xK_f), AL.launchApp def "firefox")  --a prompt search for firefox
+       , ((0 , xK_0), popOldestHiddenWindow) -- show hidden window
        , ((0 , xK_1), windows $ W.greedyView "FSL1")
        , ((0 , xK_2), windows $ W.greedyView "FSL2")
        , ((0 , xK_3), windows $ W.greedyView "FSL3")
@@ -356,7 +372,16 @@ myTabTheme = def
     , inactiveBorderColor   = "#3d5266"
     , activeTextColor       = "#4e7397" 
     , inactiveTextColor     = "#3d5266"
-     , decoHeight	    = 6
+     , decoHeight	    = 4
      , fontName		    = "xft:iosevka-10"
      }
+
+-- get polybar inifo
+eventLogHook = do
+  winset <- gets windowset
+  title <- maybe (return "") (fmap show . getName) . W.peek $ winset
+  let currWs = W.currentTag winset
+
+  io $ appendFile "/tmp/.xmonad-title-log" (title ++ "\n")
+  io $ appendFile "/tmp/.xmonad-workspace-log" (currWs ++ "\n")
 
