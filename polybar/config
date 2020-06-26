@@ -1,309 +1,174 @@
-#------------------------------workspaces module------------------------------------------{{{
-#-----------------------------------------------------------------------------------------}}}
-;
-;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
-;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
-;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
-;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
-;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
-;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
-#------------------------------globar style setting---------------------------------------{{{
 [colors]
-#background = #eedfdf
-#background-alt = #444c
-#foreground = #222
-
-#background = #1C2B40aa
-background = #111315f0
+background = #298fdfff
 background-alt = #282828aa
-#foreground = #298146
-foreground = #b9b19f
-
+foreground = #dedfd1
 foreground-alt = #555
-primary = #ffb52a
-secondary = #e60053
-alert = #bd2c40
-#[bar/example]
-[bar/mybar]
+
+;bg = #FFFFFF
+bg = #baBfC2
+fg = #FFFFFF
+fg-alt = #454545
+
+shade1 = #263238
+shade2 = #37474F
+shade3 = #455A64
+shade4 = #546E7A
+shade5 = #607D8B
+shade6 = #78909C
+shade7 = #90A4AE
+shade8 = #B0BEC5
+txt = #2C2C2C
+
+; Light-Blue
+l1 = #01579B
+l2 = #0277BD
+l3 = #0288D1
+l4 = #039BE5
+l5 = #03A9F4
+l6 = #29B6F6
+l7 = #4FC3F7
+l8 = #81D4FA
+
+red = #e53935
+pink = #d81b60
+purple = #8e24aa
+deep-purple = #5e35b1
+indigo = #3949ab
+blue = #1e88e5
+light-blue = #039be5
+cyan = #00acc1
+teal = #00897b
+green = #43a047
+light-green = #7cb342
+lime = #c0ca33
+yellow = #fdd835
+amber = #ffb300
+orange = #fb8c00
+deep-orange = #f4511e
+brown = #6d4c41
+grey = #757575
+blue-gray = #546e7a
+
+[bar/queen]
+modules-left = workspaces-xmonad battery backlight pulseaudio bluetooth docker title-xmonad
+modules-right = wlan cpu memory fan temperature date check point
+
+override-redirect = true
+wm-restack = xmonad
+
 bottom = false
-width = 100%
-height = 24
-;offset-x = 1%
-;offset-y = 1%
-radius = 0
-fixed-center = true
-background = ${colors.background}
-foreground = ${colors.foreground}
+width = 1914
+height = 26
+offset-x = 3
+offset-y = 5
+radius = 8
+fixed-center = false
+background = ${colors.bg}
+foreground = ${colors.fg}
 line-size = 0
-line-color = #ffb52a
-border-size = 0
-border-color = #00000000
-padding-left = 3
-padding-right = 3
-module-margin-left = 3
-module-margin-right = 3
 
-#font-2 = "Tamsyn:pixelsize=11;4"
-#这个字体还是比较好看的
 font-0 = "Noto Sans:size=11;3"
-#polybar显示图标的字体：找了好久，才找到的，要感动哭了：叫awesome-terminal-fonts
 font-1 = "FontAwesome:size=11;4"
-#-----------------------------------------------------------------------------------------}}}
+font-2 = "Fantasque Sans Mono:pixelsize=13;3"
+font-3 = "Iosevka Nerd Font:pixelsize=13;4"
+;display chinese
+font-4 = "WenQuanYi Micro Hei:pixelsize=10;4" 
 
-#------------------------------icon position setting--------------------------------------{{{
-modules-left = battery backlight pulseaudio bluetooth docker
-modules-center = date 
-modules-right = wlan fan temperature cpu memory 
-
-tray-position = right
-tray-padding = 18
-;tray-background = #0063ff
-;wm-restack = bspwm
-;wm-restack = i3
-;override-redirect = true
-;scroll-up = bspwm-desknext
-;scroll-down = bspwm-deskprev
-;scroll-up = i3wm-wsnext
-;scroll-down = i3wm-wsprev
-
+enable-ipc = true
 cursor-click = pointer
-cursor-scroll = ns-resize
 
-#-----------------------------------------------------------------------------------------}}}
 
-#------------------------------mount pointmodule------------------------------------------{{{
+;tray-position = center
+;tray-padding = 4
+
+
 
 [module/filesystem]
 type = internal/fs
-;interval = 2
 mount-0 = /mnt
-#mount-1 = /home/narcissus/Music/CloudMusic
 label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
 label-unmounted =
 label-unmounted-foreground = ${colors.foreground-alt}
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------backlight  module------------------------------------------{{{
+
+
+[module/google]
+type = custom/text
+content = 
+content-padding = 4
+content-foreground = ${colors.fg-alt}
+click-left = xdg-open https://www.baidu.com &
+
+
 [module/backlight]
 type = internal/backlight
 card = intel_backlight
-
-;interval = 2
-format-underline = #00BFFF
-format-prefix-foreground = #00BFFF
-; Available tags:
-;   <label> (default)
-;   <ramp>
-;   <bar>
 format = <ramp> <label>
-; Available tokens:
-;   %percentage% (default)
 label = %percentage%%
-
-; Only applies if <ramp> is used
 ramp-0 = 
-;ramp-0 = 🌕
-;ramp-1 = 🌔
-;ramp-2 = 🌓
-;ramp-3 = 🌒
-;ramp-4 = 🌑
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------cpu        module------------------------------------------{{{
+format-background = ${colors.shade3}
+format-padding = 4
+
+
 [module/cpu]
 type = internal/cpu
-
-;interval = 2
-format-underline = #1E90FF
-format-prefix-foreground = ${colors.foreground-alt}
-; Seconds to sleep between updates
-; Default: 1
-; Available tags:
-;   <label> (default)
-;   <bar-load>
-;   <ramp-load>
-;   <ramp-coreload>
-;format = <label><ramp-coreload>
 format = <label>
-
-; Available tokens:
-;   %percentage% (default) - total cpu load averaged over all cores
-;   %percentage-sum% - Cumulative load on all cores
-;   %percentage-cores% - load percentage for each core
-;   %percentage-core[1-9]% - load percentage for specific core
 label =" %percentage%%"
-;label-font = 3
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------memory     module------------------------------------------{{{
+format-background = ${colors.shade5}
+format-padding = 4
+
+
 [module/memory]
 type = internal/memory
-
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #BA55D3
-; Seconds to sleep between updates
-; Default: 1
-;interval = 2
-; Available tags:
-;   <label> (default)
-;   <bar-used>
-;   <bar-free>
-;   <ramp-used>
-;   <ramp-free>
-;   <bar-swap-used>
-;   <bar-swap-free>
-;   <ramp-swap-used>
-;   <ramp-swap-free>
-;format = <label><bar-used>
 format = <label>
-
-; Available tokens:
-;   %percentage_used% (default)
-;   %percentage_free%
-;   %gb_used%
-;   %gb_free%
-;   %gb_total%
-;   %mb_used%
-;   %mb_free%
-;   %mb_total%
-;   %percentage_swap_used%
-;   %percentage_swap_free%
-;   %mb_swap_total%
-;   %mb_swap_free%
-;   %mb_swap_used%
-;   %gb_swap_total%
-;   %gb_swap_free%
-;   %gb_swap_used%
-
-#label = " %mb_used%"
 label = " %mb_used%"
-;label-font = 3
+format-background = ${colors.shade4}
+format-padding = 4
 
-; Only applies if <bar-used> is used
-bar-used-indicator =
-bar-used-width = 30
-bar-used-foreground-0 = #55aa55
-bar-used-foreground-1 = #557755
-bar-used-foreground-2 = #f5a70a
-bar-used-foreground-3 = #ff5555
-bar-used-fill = ▐
-bar-used-empty = ▐
-bar-used-empty-foreground = #444444
 
-; Only applies if <ramp-used> is used
-ramp-used-0 = ▁
-ramp-used-1 = ▂
-ramp-used-2 = ▃
-ramp-used-3 = ▄
-ramp-used-4 = ▅
-ramp-used-5 = ▆
-ramp-used-6 = ▇
-ramp-used-7 = █
-ramp-used-0-foreground = #aaff77
-ramp-used-1-foreground = #aaff77
-ramp-used-2-foreground = #aaff77
-ramp-used-3-foreground = #aaff77
-ramp-used-4-foreground = #fba922
-ramp-used-5-foreground = #fba922
-ramp-used-6-foreground = #ff5555
-ramp-used-7-foreground = #ff5555
-
-; Only applies if <ramp-free> is used
-ramp-free-0 = ▁
-ramp-free-1 = ▂
-ramp-free-2 = ▃
-ramp-free-3 = ▄
-ramp-free-4 = ▅
-ramp-free-5 = ▆
-ramp-free-6 = ▇
-ramp-free-7 = █
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------wifi       module------------------------------------------{{{
 [module/wlan]
 type = internal/network
-;interval = 2
-#format-connected-background = #a674fb
-format-connected-underline = #987111
-;format-disconnected-underline = ${self.format-connected-underline}
-#;label-disconnected = %ifname% disconnected
 interface = wlo1
 format-connected = <label-connected>
-#format-connected-prefix = " "
-format-connected-prefix = "  "
-#format-connected-prefix-foreground = #48db4c
-label-connected = %upspeed:5%   %downspeed:5% 
-
-#label-connected =  %downspeed:5%↓
+;format-connected-prefix = "  "
+format-connected-prefix = " "
+label-connected = "%upspeed:5%   %downspeed:5% "
 format-disconnected = <label-disconnected>
 label-disconnected = not connected
-label-disconnected-foreground = #66ffffff
-format-padding = 0
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------eth        module------------------------------------------{{{
-[module/eth]
-type = internal/network
-interface = enp9s0
+format-connected-background = ${colors.shade6}
+format-connected-padding = 4
 
-;interval = 2
-format-connected-underline = #55aa55
-#format-connected-prefix = " "
-format-connected-prefix = "📶 "
-format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
 
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------date       module------------------------------------------{{{
 [module/date]
 type = internal/date
-
-#date = "%Y-%m-%d"
-date-alt = "%Y-%m-%d"
-
-;interval = 1
-time = %H:%M
+date-alt = " %Y-%m-%d"
+time =  %H:%M
 time-alt = " %H:%M:%S"
-
-;format-prefix = 
-format-prefix-foreground = #444
-format-underline = #FF8C69
-
+format-background = ${colors.shade1}
+format-padding = 4
 label = " %date%%time%"
 
-#------------------------------pulseaudio module------------------------------------------{{{
+
 [module/pulseaudio]
-#type = internal/volume
 type = internal/alsa
 format-volume =   <ramp-volume>  <label-volume>
 format-muted = 0% 
 ramp-volume-0 = 
-format-volume-underline = #f05e2b
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------battery    module------------------------------------------{{{
+format-volume-background = ${colors.shade4}
+format-volume-padding = 4
+
+
 [module/battery]
 type = internal/battery
 full-at = 98
-
-;interval = 2
-format-charging-underline = #ffb52a
-format-full-underline = ${self.format-charging-underline}
-format-discharging-underline = ${self.format-charging-underline}
 format-charging = <animation-charging> <label-charging>
 format-discharging = <ramp-capacity> <label-discharging>
 format-full = %{F#666}%{F#ccfafafa} <label-full>
-#label-charging-font = 3
-#label-discharing-font = 3
-
 ramp-capacity-0 = 
 ramp-capacity-1 = 
 ramp-capacity-2 = 
 ; low power alert
 ramp-capacity-0-foreground = #ff5555
-
-; it will display over the three pattern when charing
-; at a framerate 750
-; and each has a foreground color
 animation-charging-0 = 
 animation-charging-1 = 
 animation-charging-2 = 
@@ -311,66 +176,103 @@ animation-charging-2-foreground = #aaff77
 animation-charging-1-foreground = #fba922
 animation-charging-0-foreground = #ff5555
 animation-charging-framerate = 750
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------temperaturemodule------------------------------------------{{{
+
+format-charging-background = ${colors.shade2}
+format-discharging-background = ${colors.shade2}
+format-discharging-padding = 4
+format-charging-padding = 4
+
+
 [module/temperature]
 type = internal/temperature
 thermal-zone = 0
 warn-temperature = 60
-
-;interval = 2
 format = <ramp> <label>
-format-underline = #228000
 format-warn = <ramp> <label-warn>
-#format-warn-underline = ${self.format-underline}
-format-warn-underline = #f50a4d
-
 label = %temperature-c%
 label-warn = %temperature-c%
-label-warn-foreground = ${colors.secondary}
-
-#ramp-0 = 
-#ramp-1 = 
-#ramp-2 = 
 ramp-0 = 
-#ramp-foreground = ${colors.foreground-alt}
-#-----------------------------------------------------------------------------------------}}}
-#------------------------------setting    module------------------------------------------{{{
+format-background = ${colors.shade2}
+format-warn-background = ${colors.shade2}
+format-warn-foreground = ${colors.red}
+format-padding = 4
+format-warn-padding = 4
+
+
 [settings]
 screenchange-reload = true
-;compositing-background = xor
-;compositing-background = screen
-;compositing-foreground = source
-;compositing-border = over
-;pseudo-transparency = false
-
-[global/wm]
-margin-top = 0
-margin-bottom = 5
-
 
 
 [module/fan]
 type = custom/script
 exec = echo "  `cat /sys/devices/platform/asus-nb-wmi/hwmon/hwmon?/fan1_input` RPM"
+format-background = ${colors.shade3}
+format-padding = 4
+
 
 [module/docker]
 type = custom/script
 exec = ~/.config/polybar/docker
+format-background = ${colors.shade7}
+
 
 [module/bluetooth]
 type = custom/script
 exec = ~/.config/polybar/bluetooth
+format-background = ${colors.shade7}
+
 
 [module/check]
 type = custom/script
 exec = ~/.config/polybar/check
 
-[module/xwindow]
-type = internal/xwindow
-label = %title:0:30:...%
 
-[module/xmonad]
+[module/point]
+type = custom/text
+;content =                 
+content = "  "
+content-foreground = ${colors.l4}
+content-padding = 2
+click-left = ~/.config/polybar/scripts/sysmenu
+click-right = ~/.config/polybar/scripts/sysmenu
+
+
+[module/menu]
+type = custom/text
+content =  
+content-padding = 4
+content-foreground = ${colors.shade1}
+click-left = ~/.config/polybar/scripts/menu
+click-middle = ~/.config/polybar/scripts/menu_full
+click-right = ~/.config/polybar/scripts/color-switch.sh
+
+[module/capture]
+type = custom/text
+content = " "
+content-foreground = ${colors.shade4}
+content-padding = 4
+click-left = ffcast png  ~/Pictures/capture/$(date +%Y%m%d%H%M%S).png
+
+[module/xkeyboard]
+type = internal/xkeyboard
+label-layout-padding = 2
+layout-icon-0 = ch;C
+layout-icon-1 = us;U
+format-foreground = ${colors.shade1}
+
+[module/workspaces-xmonad]
 type = custom/script
-exec = xmonad-log
+exec = tail -F /tmp/.xmonad-workspace-log
+exec-if = [ -p /tmp/.xmonad-workspace-log ]
 tail = true
+label-background = ${colors.light-blue}
+label-foreground = ${colors.shade1}
+label-padding = 2
+
+[module/title-xmonad]
+type = custom/script
+exec = tail -F /tmp/.xmonad-title-log
+exec-if = [ -p /tmp/.xmonad-title-log ]
+tail = true
+label-background = ${colors.light-blue}
+label-padding = 2
